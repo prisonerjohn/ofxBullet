@@ -357,6 +357,20 @@ void ofxBulletBaseShape::enableKinematic() {
 }
 
 //--------------------------------------------------------------
+void ofxBulletBaseShape::setLocalScaling( float a_scaling ) {
+    if (_shape) {
+        _shape->setLocalScaling( btVector3(a_scaling, a_scaling, a_scaling) );
+    }
+}
+
+//--------------------------------------------------------------
+void ofxBulletBaseShape::setLocalScaling( const ofVec3f& a_scaling ) {
+    if (_shape) {
+        _shape->setLocalScaling( btVector3(a_scaling.x, a_scaling.y, a_scaling.z) );
+    }
+}
+
+//--------------------------------------------------------------
 void ofxBulletBaseShape::applyForce( const ofVec3f& a_frc, const ofVec3f& a_rel_pos ) {
 	_rigidBody->applyForce( btVector3(a_frc.x, a_frc.y, a_frc.z), btVector3(a_rel_pos.x, a_rel_pos.y, a_rel_pos.z) );
 }
