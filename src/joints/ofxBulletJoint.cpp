@@ -44,6 +44,27 @@ void ofxBulletJoint::create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShap
 }
 
 //--------------------------------------------------------------
+void ofxBulletJoint::create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape1, const ofVec3f& a_transform1, ofxBulletBaseShape* a_shape2, const ofVec3f& a_transform2 ) {
+    _world = a_world;
+    // we should have these always influenced by the joint, so don't let them go to sleep //
+    a_shape1->setActivationState( DISABLE_DEACTIVATION );
+    a_shape2->setActivationState( DISABLE_DEACTIVATION );
+    
+    btTransform frameInA = btTransform::getIdentity();
+    frameInA.setOrigin( btVector3(btScalar(a_transform1.x), btScalar(a_transform1.y), btScalar(a_transform1.z)) );
+    btTransform frameInB = btTransform::getIdentity();
+    frameInB.setOrigin( btVector3(btScalar(a_transform2.x), btScalar(a_transform2.y), btScalar(a_transform2.z)) );
+    
+    _joint = new btGeneric6DofConstraint(*a_shape2->getRigidBody(), *a_shape1->getRigidBody(), frameInA, frameInB, true);
+    
+    _setDefaults();
+    
+    _bTwoBodies	= true;
+    _bCreated	= true;
+}
+
+
+//--------------------------------------------------------------
 void ofxBulletJoint::create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape, ofVec3f a_pos ) {
 	_world = a_world;
 	// we should have these always influenced by the joint, so don't let them go to sleep //
@@ -60,6 +81,28 @@ void ofxBulletJoint::create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShap
 	_targetPos.set(a_pos.x, a_pos.y, a_pos.z);
 	_bTwoBodies = false;
 	_bCreated	= true;
+}
+
+//--------------------------------------------------------------
+void ofxBulletJoint::create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape, const ofVec3f& a_transform, ofVec3f a_pos ) {
+    _world = a_world;
+    // we should have these always influenced by the joint, so don't let them go to sleep //
+    a_shape->setActivationState( DISABLE_DEACTIVATION );
+    
+//    btVector3 localPivot	= a_shape->getRigidBody()->getCenterOfMassTransform().inverse() * btVector3(a_pos.x, a_pos.y, a_pos.z);
+//    btTransform tr;
+//    tr.setIdentity();
+//    tr.setOrigin( localPivot );
+    btTransform frameIn = btTransform::getIdentity();
+    frameIn.setOrigin( btVector3(btScalar(a_transform.x), btScalar(a_transform.y), btScalar(a_transform.z)) );
+    
+    _joint = new btGeneric6DofConstraint(*a_shape->getRigidBody(), frameIn, false);
+    
+    _setDefaults();
+    
+    _targetPos.set(a_pos.x, a_pos.y, a_pos.z);
+    _bTwoBodies = false;
+    _bCreated	= true;
 }
 
 //--------------------------------------------------------------

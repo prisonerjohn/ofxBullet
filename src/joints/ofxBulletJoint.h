@@ -20,7 +20,9 @@ public:
 	~ofxBulletJoint();
 	
 	void	create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape1, ofxBulletBaseShape* a_shape2 );
+    void	create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape1, const ofVec3f& a_transform1, ofxBulletBaseShape* a_shape2, const ofVec3f& a_transform2 );
 	void	create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape, ofVec3f a_pos );
+    void	create( btDiscreteDynamicsWorld* a_world, ofxBulletBaseShape* a_shape, const ofVec3f& a_transform, ofVec3f a_pos );
 	
 	/******************************/
 	// call before calling add() //
